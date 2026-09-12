@@ -1,0 +1,90 @@
+{
+  "name": "Waterbomb Star",
+  "nodes": 9,
+  "faces": [
+    [4, 1, 0], [4, 0, 3],
+    [4, 2, 1], [4, 5, 2],
+    [4, 3, 6], [4, 6, 7],
+    [4, 7, 8], [4, 8, 5]
+  ],
+  "flat": [
+    -2.0, -2.0, 0.0,
+     0.0, -2.0, 0.0,
+     2.0, -2.0, 0.0,
+    -2.0,  0.0, 0.0,
+     0.0,  0.0, 0.0,
+     2.0,  0.0, 0.0,
+    -2.0,  2.0, 0.0,
+     0.0,  2.0, 0.0,
+     2.0,  2.0, 0.0
+  ],
+  "folded": [
+    -0.5, -0.5, 1.8,
+     0.0, -1.0, 0.0,
+     0.5, -0.5, 1.8,
+    -1.0,  0.0, 0.0,
+     0.0,  0.0, 1.2,
+     1.0,  0.0, 0.0,
+    -0.5,  0.5, 1.8,
+     0.0,  1.0, 0.0,
+     0.5,  0.5, 1.8
+  ],
+  "kinematicTree": [
+    {
+      "faceIndex": 0,
+      "parentIndex": -1,
+      "foldAxis": [0, 1, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": 0
+    },
+    {
+      "faceIndex": 1,
+      "parentIndex": 0,
+      "foldAxis": [-0.707, 0.707, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": 1
+    },
+    {
+      "faceIndex": 2,
+      "parentIndex": 0,
+      "foldAxis": [0.707, 0.707, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": -1
+    },
+    {
+      "faceIndex": 3,
+      "parentIndex": 2,
+      "foldAxis": [1, 0, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": 0.5
+    },
+    {
+      "faceIndex": 4,
+      "parentIndex": 1,
+      "foldAxis": [-1, 0, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": -0.5
+    },
+    {
+      "faceIndex": 5,
+      "parentIndex": 4,
+      "foldAxis": [-0.707, -0.707, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": -1
+    },
+    {
+      "faceIndex": 7,
+      "parentIndex": 3,
+      "foldAxis": [0.707, -0.707, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": 1
+    },
+    {
+      "faceIndex": 6,
+      "parentIndex": 5,
+      "foldAxis": [0, 1, 0],
+      "foldOrigin": [0, 0, 0],
+      "angleMultiplier": 0
+    }
+  ]
+}
