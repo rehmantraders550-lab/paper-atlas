@@ -120,9 +120,12 @@ export default function App() {
   const filteredESSAMaterials = useMemo(() => {
     return MATERIAL_DATABASE.filter(m => {
       const matchesCategory = selectedCategory === "all" || m.category === selectedCategory;
-      const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            m.subName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            m.bestFor.toLowerCase().includes(searchTerm.toLowerCase());
+      const query = searchTerm.toLowerCase();
+      const matchesSearch = m.name.toLowerCase().includes(query) || 
+                            m.subName.toLowerCase().includes(query) ||
+                            m.bestFor.toLowerCase().includes(query) ||
+                            m.availabilityStatus.toLowerCase().includes(query) ||
+                            m.verificationStatus.toLowerCase().includes(query);
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchTerm]);
@@ -347,7 +350,7 @@ export default function App() {
             { id: "all", label: "All Substrates" },
             { id: "paperboards", label: "Paperboards" },
             { id: "corrugated", label: "Corrugated Mediums" },
-            { id: "specialty", label: "Specialty Papers" },
+            { id: "specialty", label: "Specialty Papers & Wraps" },
             { id: "films", label: "High-Performance Films" },
           ].map(tab => (
             <button
@@ -474,6 +477,9 @@ export default function App() {
                       <p className="text-xs text-deckle-muted line-clamp-2 leading-relaxed">
                         {mat.description}
                       </p>
+                      <span className="inline-flex mt-1 text-[9px] uppercase tracking-wider font-bold text-deckle-muted border border-deckle-border rounded-md px-2 py-1 bg-deckle-surface/70">
+                        {mat.availabilityStatus}
+                      </span>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-deckle-border/50 flex justify-between items-center text-xs">
@@ -501,8 +507,8 @@ export default function App() {
                       <span className="px-3 py-1 bg-deckle-surface text-deckle-dark text-[10px] font-bold rounded-full uppercase tracking-widest border border-deckle-border">
                       {activeMaterial.category} SPECIFICATION
                     </span>
-                    <div className="text-[10px] font-bold uppercase text-deckle-muted flex items-center gap-1 tracking-widest">
-                      <Award className="w-3 h-3" /> ESSA Certified
+                    <div className="text-[10px] font-bold uppercase text-deckle-muted flex items-center gap-1 tracking-widest text-right">
+                      <Award className="w-3 h-3 shrink-0" /> {activeMaterial.availabilityStatus}
                     </div>
                   </div>
 
@@ -546,32 +552,44 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* Score Matrix */}
-                <div className="space-y-4">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-deckle-muted">Structural Stress Matrix</span>
-                  
-                  <div className="space-y-3">
-                    {[
-                      { label: "Tensile & Tear Resistance", val: activeMaterial.strengthScore * 20 },
-                      { label: "Chromatographic Print Fidelity", val: activeMaterial.printScore },
-                      { label: "Water & Grease Hydrophobics", val: activeMaterial.moistureBarrier },
-                      { label: "Circular Ecological Reclaim", val: activeMaterial.sustainabilityScore },
-                    ].map((score, idx) => (
-                      <div key={idx} className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-medium text-deckle-text">
-                          <span>{score.label}</span>
-                          <span className="text-deckle-muted">{score.val}%</span>
+                {/* Score Matrix / Evidence Profile */}
+                {activeMaterial.showPerformanceMetrics ? (
+                  <div className="space-y-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-deckle-muted">Structural Stress Matrix</span>
+                    
+                    <div className="space-y-3">
+                      {[
+                        { label: "Tensile & Tear Resistance", val: activeMaterial.strengthScore * 20 },
+                        { label: "Chromatographic Print Fidelity", val: activeMaterial.printScore },
+                        { label: "Water & Grease Hydrophobics", val: activeMaterial.moistureBarrier },
+                        { label: "Circular Ecological Reclaim", val: activeMaterial.sustainabilityScore },
+                      ].map((score, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex justify-between text-xs font-medium text-deckle-text">
+                            <span>{score.label}</span>
+                            <span className="text-deckle-muted">{score.val}%</span>
+                          </div>
+                          <div className="h-1.5 bg-deckle-surface rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-deckle-dark rounded-full transition-all duration-1000 ease-out" 
+                              style={{ width: `${score.val}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="h-1.5 bg-deckle-surface rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-deckle-dark rounded-full transition-all duration-1000 ease-out" 
-                            style={{ width: `${score.val}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-3 p-4 rounded-2xl border border-deckle-border bg-deckle-surface/60">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-deckle-muted">Evidence Profile</span>
+                    <p className="text-xs text-deckle-text leading-relaxed">
+                      {activeMaterial.verificationStatus}
+                    </p>
+                    <p className="text-[11px] text-deckle-muted leading-relaxed">
+                      Quantified performance scores are intentionally withheld until grade-specific supplier or production data is verified.
+                    </p>
+                  </div>
+                )}
 
                 <div className="divide-y divide-deckle-border/50 pt-2">
                   <div className="py-3 flex justify-between items-start gap-4">
@@ -608,7 +626,7 @@ export default function App() {
                 <div className="p-4 bg-[#F2ECE0] border border-deckle-border rounded-2xl flex items-start gap-3">
                   <Leaf className="w-5 h-5 text-deckle-dark shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-deckle-muted tracking-widest">Ecological Rating</span>
+                    <span className="text-[10px] uppercase font-bold text-deckle-muted tracking-widest">Evidence / Sustainability Note</span>
                     <p className="text-xs font-semibold text-deckle-text leading-relaxed">
                       {activeMaterial.sustainabilityLabel}
                     </p>
